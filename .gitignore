@@ -23,8 +23,8 @@ __pycache__/
 .idea/
 .vscode/
 
-# Архив дублирует содержимое artifacts/; в репозиторий нужны исходные файлы
-/artifacts.zip
+# Архив дублирует содержимое hw_01_sft/; в репозиторий нужны исходные файлы
+/hw_01_sft.zip
 /autoservice_results.zip
 /autoservice_submission.zip
 /training_results.zip
@@ -34,9 +34,9 @@ __pycache__/
 /weights_part_*.bin
 
 # Промежуточные запуски; итоговый adapter/*.safetensors сохраняем в Git
-/artifacts/checkpoints/
-/artifacts/runs/
-/artifacts/review_run/
+/hw_01_sft/checkpoints/
+/hw_01_sft/runs/
+/hw_01_sft/review_run/
 
-# В artifacts/ отслеживаются ноутбук с outputs, отчёт, данные, код, метрики,
+# В hw_01_sft/ отслеживаются ноутбук с outputs, отчёт, данные, код, метрики,
 # графики, объединённые JSON-логи и финальный LoRA-адаптер (~35 МиБ).

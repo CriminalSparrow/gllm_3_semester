@@ -35,7 +35,6 @@ Colab, использованный для запусков: [RK-1-GLLM-Sokolov-
 | `logs/judge.json` | 40 оценок A/B, сырые ответы API и сообщения запуска |
 | `code/` | Обычные Python-скрипты, используемые ноутбуком |
 | `requirements.txt` | Основные зависимости; полный список пакетов — в `logs/training.json` → `pip_freeze` |
-| `SHA256SUMS.txt` | Контрольные суммы сдаваемых файлов |
 
 Загрузка данных:
 
@@ -48,23 +47,23 @@ ds = load_dataset('json', data_files={
 print(ds['train'][0]['messages'])
 ```
 
-Для отдельного запуска скриптов из родительской папки `artifacts`:
+Для отдельного запуска скриптов из родительской папки `hw_01_sft`:
 
 ```bash
-pip install -r artifacts/requirements.txt
-python artifacts/code/common.py
-python -u artifacts/code/run_experiment.py   # только T4
-python -u artifacts/code/judge.py            # опционально, требует API
-python artifacts/code/plot_results.py
-python artifacts/code/infer.py --question "На ходу загорелась красная лампа давления масла. Что делать?"
+pip install -r hw_01_sft/requirements.txt
+python hw_01_sft/code/common.py
+python -u hw_01_sft/code/run_experiment.py   # только T4
+python -u hw_01_sft/code/judge.py            # опционально, требует API
+python hw_01_sft/code/plot_results.py
+python hw_01_sft/code/infer.py --question "На ходу загорелась красная лампа давления масла. Что делать?"
 ```
 
-API-переменные: `LLM_URL` (base URL без `/chat/completions`), `LLM_TOKEN`, `JUDGE_MODEL=glm-4.7`. Их можно задать через окружение или `.env` рядом с `artifacts`. **`.env` не входит в сдаваемый комплект.** Для повторного сбора синтетических данных есть `code/prepare_data.py`; в обычном воспроизведении используются зафиксированные JSONL.
+API-переменные: `LLM_URL` (base URL без `/chat/completions`), `LLM_TOKEN`, `JUDGE_MODEL=glm-4.7`. Их можно задать через окружение или `.env` рядом с `hw_01_sft`. **`.env` не входит в сдаваемый комплект.** Для повторного сбора синтетических данных есть `code/prepare_data.py`; в обычном воспроизведении используются зафиксированные JSONL.
 
 ## Состав репозитория и Git
 
-Сдаваемый комплект — корневой README, `.gitignore` и вся папка `artifacts/` с отчётом, выполненным ноутбуком, кодом, данными, весами LoRA, метриками, графиками и тремя JSON-логами. Отдельный ZIP не требуется; его копия удалена. Секреты, виртуальное окружение и кэши в репозиторий не входят.
+Сдаваемый комплект — корневой README, `.gitignore` и вся папка `hw_01_sft/` с отчётом, выполненным ноутбуком, кодом, данными, весами LoRA, метриками, графиками и тремя JSON-логами. Отдельный ZIP не требуется; его копия удалена. Секреты, виртуальное окружение и кэши в репозиторий не входят.
 
-В Git нужно добавить корневые `README.md`, `.gitignore` и **всю `artifacts/`**. Веса `adapter_model.safetensors` (~35 МиБ) и outputs ноутбука намеренно не исключены. `.env`, `.venv/`, архив и промежуточные checkpoints исключены в корневом `.gitignore`. Отчёт редактируется вручную; сборка ноутбука его не перезаписывает.
+В Git нужно добавить корневые `README.md`, `.gitignore` и **всю `hw_01_sft/`**. Веса `adapter_model.safetensors` (~35 МиБ) и outputs ноутбука намеренно не исключены. `.env`, `.venv/`, архив и промежуточные checkpoints исключены в корневом `.gitignore`. Отчёт редактируется вручную; сборка ноутбука его не перезаписывает.
 
-Адаптер загружается через `PeftModel.from_pretrained(base_model, 'artifacts/adapter')`, где `base_model` — указанная в `config.json` ревизия Qwen в NF4. Полный пример загрузки и генерации находится в `code/run_experiment.py`. Базовые веса не дублируются в архиве; [официальная модель](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) доступна публично.
+Адаптер загружается через `PeftModel.from_pretrained(base_model, 'hw_01_sft/adapter')`, где `base_model` — указанная в `config.json` ревизия Qwen в NF4. Полный пример загрузки и генерации находится в `code/run_experiment.py`. Базовые веса не дублируются в архиве; [официальная модель](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) доступна публично.

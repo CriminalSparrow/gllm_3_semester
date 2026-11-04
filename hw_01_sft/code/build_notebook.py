@@ -13,7 +13,7 @@ def bootstrap():
         paths += [p for p in (ROOT / folder).glob('*') if p.is_file()]
     with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as z:
         for path in paths:
-            z.write(path, 'artifacts/' + str(path.relative_to(ROOT)))
+            z.write(path, 'hw_01_sft/' + str(path.relative_to(ROOT)))
     return base64.b64encode(buffer.getvalue()).decode()
 
 
@@ -57,7 +57,7 @@ except ImportError:
 # Встроенный архив содержит исходники, данные и фактические оценки первого прогона.
 PAYLOAD = ''' + repr(bootstrap()) + '''
 zipfile.ZipFile(io.BytesIO(base64.b64decode(PAYLOAD))).extractall('.')
-ROOT = pathlib.Path('artifacts').resolve()
+ROOT = pathlib.Path('hw_01_sft').resolve()
 sys.path.insert(0, str(ROOT / 'code'))
 from common import read_jsonl, read_log, save_log, write_jsonl, check_answer, check_examples, model_check_examples, display_answer
 
@@ -167,7 +167,7 @@ print('Логи:', ', '.join(p.name for p in sorted((ROOT/'logs').glob('*.json')
     md('## 6. Сохранение\nАрхив содержит данные, код, веса и результаты текущего запуска. '
        'В сдаваемом комплекте также есть README и отредактированный отчёт. '
        'Скачивание в Colab можно включить флагом ниже.')
-    code('''archive = shutil.make_archive('autoservice_results', 'zip', root_dir='.', base_dir='artifacts')
+    code('''archive = shutil.make_archive('autoservice_results', 'zip', root_dir='.', base_dir='hw_01_sft')
 print('Архив создан:', archive, '; размер:', round(pathlib.Path(archive).stat().st_size/1024**2, 1), 'МиБ')
 DOWNLOAD = False
 if DOWNLOAD and files is not None:
