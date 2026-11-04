@@ -1,0 +1,15 @@
+{
+  "train": 112,
+  "validation": 16,
+  "test": 20,
+  "seed": 42,
+  "source": "Synthetic GLM (requested glm-4.7, reported glm-5.3-flash); 24 safety examples edited; separate test",
+  "teacher_model_requested": "glm-4.7",
+  "teacher_model_reported": "glm-5.3-flash",
+  "split": "One generated example per topic held out for validation; fixed independent test",
+  "sha256": {
+    "train.jsonl": "4894fb55b74fbb8fea6f05ed81546510ef9168492671df9c36bcaaacb14279d8",
+    "test.jsonl": "d9b6f3a9c35507c90b901922253c28d58e00ded6b70de15031bd39e76a19d3d0",
+    "validation.jsonl": "a733652883b6c1e469a2e05ab59e987b60a307365f0ace80fc4d3a3e3d1f5f97"
+  }
+}

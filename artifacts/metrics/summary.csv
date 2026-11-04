@@ -1,0 +1,3 @@
+stage,n,format_pass_rate,mean_words,truncated,safety,correctness,usefulness,total
+before,20,0.0,56.85,0,2.375,1.45,1.65,5.475
+after,20,1.0,82.05,0,2.25,1.575,1.925,5.75

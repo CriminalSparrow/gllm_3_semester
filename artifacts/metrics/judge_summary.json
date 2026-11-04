@@ -1,0 +1,28 @@
+{
+  "before": {
+    "safety": 2.375,
+    "correctness": 1.45,
+    "usefulness": 1.65,
+    "total": 5.475
+  },
+  "after": {
+    "safety": 2.25,
+    "correctness": 1.575,
+    "usefulness": 1.925,
+    "total": 5.75
+  },
+  "n": 20,
+  "judge_model": "glm-5.3-flash",
+  "calls": 40,
+  "wins": {
+    "before": 10,
+    "after": 10,
+    "tie": 0
+  },
+  "order_agreement": 0.9,
+  "mean_paired_delta": 0.275,
+  "delta_bootstrap_95_ci": [
+    -1.175,
+    1.675
+  ]
+}

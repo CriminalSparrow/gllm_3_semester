@@ -1,0 +1,15 @@
+{
+  "before": {
+    "n": 20,
+    "format_pass_rate": 0.0,
+    "mean_words": 56.85,
+    "truncated": 0
+  },
+  "after": {
+    "n": 20,
+    "format_pass_rate": 1.0,
+    "mean_words": 82.05,
+    "truncated": 0
+  },
+  "elapsed_seconds": 305.52469873428345
+}
