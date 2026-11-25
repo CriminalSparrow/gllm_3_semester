@@ -37,6 +37,8 @@ __pycache__/
 /hw_01_sft/checkpoints/
 /hw_01_sft/runs/
 /hw_01_sft/review_run/
+/hw_02_dpo/runs/
+/hw_02_dpo/review_run/
 
 # В hw_01_sft/ отслеживаются ноутбук с outputs, отчёт, данные, код, метрики,
 # графики, объединённые JSON-логи и финальный LoRA-адаптер (~35 МиБ).

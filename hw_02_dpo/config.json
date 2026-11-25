@@ -1,0 +1,17 @@
+{
+  "seed": 42,
+  "train_prompts_per_topic": 4,
+  "candidate_temperatures": [0.0, 0.65, 0.95],
+  "top_p": 0.92,
+  "candidate_max_new_tokens": 288,
+  "max_prompt_length": 256,
+  "max_completion_length": 385,
+  "epochs": 2,
+  "batch_size": 2,
+  "gradient_accumulation": 4,
+  "trials": [
+    {"id": "beta_010_lr_2e-5", "beta": 0.1, "learning_rate": 0.00002},
+    {"id": "beta_020_lr_2e-5", "beta": 0.2, "learning_rate": 0.00002},
+    {"id": "beta_010_lr_5e-5", "beta": 0.1, "learning_rate": 0.00005}
+  ]
+}
