@@ -3,14 +3,14 @@
     "n": 44,
     "risk_n": 20,
     "wins": {
-      "sft": 15,
-      "dpo": 11,
-      "tie": 18
+      "sft": 12,
+      "dpo": 25,
+      "tie": 7
     },
     "safety_priority_wins": {
-      "sft": 15,
-      "dpo": 11,
-      "tie": 18
+      "sft": 12,
+      "dpo": 26,
+      "tie": 6
     },
     "positions": {
       "sft": {
@@ -22,49 +22,49 @@
         "B": 22
       }
     },
-    "dpo_win_rate": 0.25,
+    "dpo_win_rate": 0.5681818181818182,
     "dpo_win_rate_ci95": [
-      0.14574213828964888,
-      0.3944056635895915
+      0.4222414699362943,
+      0.703172765914822
     ],
     "paired_delta": {
-      "mean": -0.25,
+      "mean": 1.0227272727272727,
       "ci95": [
-        -0.8636363636363636,
-        0.36363636363636365
+        0.09090909090909091,
+        1.9545454545454546
       ]
     },
     "axes": {
       "safety": {
-        "sft": 2.9545454545454546,
-        "dpo": 2.909090909090909,
+        "sft": 2.1363636363636362,
+        "dpo": 2.840909090909091,
         "paired_delta": {
-          "mean": -0.045454545454545456,
+          "mean": 0.7045454545454546,
           "ci95": [
-            -0.36363636363636365,
-            0.2727272727272727
+            0.20454545454545456,
+            1.1818181818181819
           ]
         }
       },
       "correctness": {
-        "sft": 1.8636363636363635,
-        "dpo": 1.7272727272727273,
+        "sft": 1.6136363636363635,
+        "dpo": 1.6818181818181819,
         "paired_delta": {
-          "mean": -0.13636363636363635,
+          "mean": 0.06818181818181818,
           "ci95": [
-            -0.3409090909090909,
-            0.06818181818181818
+            -0.22727272727272727,
+            0.36363636363636365
           ]
         }
       },
       "usefulness": {
-        "sft": 2.2045454545454546,
-        "dpo": 2.1363636363636362,
+        "sft": 1.7272727272727273,
+        "dpo": 1.9772727272727273,
         "paired_delta": {
-          "mean": -0.06818181818181818,
+          "mean": 0.25,
           "ci95": [
-            -0.2727272727272727,
-            0.13636363636363635
+            -0.045454545454545456,
+            0.5454545454545454
           ]
         }
       }
@@ -72,18 +72,18 @@
     "sft": {
       "format_pass_count": 44,
       "format_pass_rate": 1.0,
-      "mean_words": 86.4090909090909,
+      "mean_words": 84.6590909090909,
       "truncated_count": 0,
       "truncated_rate": 0.0,
-      "critical_safety_count": 5,
-      "critical_safety_rate": 0.25
+      "critical_safety_count": 15,
+      "critical_safety_rate": 0.75
     },
     "dpo": {
-      "format_pass_count": 44,
-      "format_pass_rate": 1.0,
-      "mean_words": 76.20454545454545,
-      "truncated_count": 0,
-      "truncated_rate": 0.0,
+      "format_pass_count": 42,
+      "format_pass_rate": 0.9545454545454546,
+      "mean_words": 76.1590909090909,
+      "truncated_count": 2,
+      "truncated_rate": 0.045454545454545456,
       "critical_safety_count": 8,
       "critical_safety_rate": 0.4
     }
@@ -92,14 +92,14 @@
     "n": 20,
     "risk_n": 8,
     "wins": {
-      "sft": 5,
-      "dpo": 5,
-      "tie": 10
+      "sft": 6,
+      "dpo": 14,
+      "tie": 0
     },
     "safety_priority_wins": {
-      "sft": 5,
-      "dpo": 5,
-      "tie": 10
+      "sft": 6,
+      "dpo": 14,
+      "tie": 0
     },
     "positions": {
       "sft": {
@@ -111,49 +111,49 @@
         "B": 10
       }
     },
-    "dpo_win_rate": 0.25,
+    "dpo_win_rate": 0.7,
     "dpo_win_rate_ci95": [
-      0.11186170140766569,
-      0.468700877618744
+      0.4810271816464765,
+      0.8545227551323956
     ],
     "paired_delta": {
-      "mean": -0.15,
+      "mean": 1.8,
       "ci95": [
-        -0.75,
-        0.4
+        0.25,
+        3.3
       ]
     },
     "axes": {
       "safety": {
-        "sft": 3.25,
-        "dpo": 3.2,
+        "sft": 1.8,
+        "dpo": 2.9,
         "paired_delta": {
-          "mean": -0.05,
+          "mean": 1.1,
           "ci95": [
-            -0.3,
-            0.2
+            0.25,
+            1.95
           ]
         }
       },
       "correctness": {
-        "sft": 1.85,
-        "dpo": 1.75,
+        "sft": 1.5,
+        "dpo": 1.85,
         "paired_delta": {
-          "mean": -0.1,
+          "mean": 0.35,
           "ci95": [
-            -0.35,
-            0.15
+            -0.15,
+            0.85
           ]
         }
       },
       "usefulness": {
-        "sft": 2.25,
-        "dpo": 2.25,
+        "sft": 1.7,
+        "dpo": 2.05,
         "paired_delta": {
-          "mean": 0.0,
+          "mean": 0.35,
           "ci95": [
-            -0.3,
-            0.3
+            -0.15,
+            0.85
           ]
         }
       }
@@ -161,34 +161,34 @@
     "sft": {
       "format_pass_count": 20,
       "format_pass_rate": 1.0,
-      "mean_words": 86.0,
+      "mean_words": 82.45,
       "truncated_count": 0,
       "truncated_rate": 0.0,
-      "critical_safety_count": 1,
-      "critical_safety_rate": 0.125
+      "critical_safety_count": 8,
+      "critical_safety_rate": 1.0
     },
     "dpo": {
-      "format_pass_count": 20,
-      "format_pass_rate": 1.0,
-      "mean_words": 75.9,
-      "truncated_count": 0,
-      "truncated_rate": 0.0,
-      "critical_safety_count": 2,
-      "critical_safety_rate": 0.25
+      "format_pass_count": 19,
+      "format_pass_rate": 0.95,
+      "mean_words": 78.05,
+      "truncated_count": 1,
+      "truncated_rate": 0.05,
+      "critical_safety_count": 3,
+      "critical_safety_rate": 0.375
     }
   },
   "fresh": {
     "n": 24,
     "risk_n": 12,
     "wins": {
-      "sft": 10,
-      "dpo": 6,
-      "tie": 8
+      "sft": 6,
+      "dpo": 11,
+      "tie": 7
     },
     "safety_priority_wins": {
-      "sft": 10,
-      "dpo": 6,
-      "tie": 8
+      "sft": 6,
+      "dpo": 12,
+      "tie": 6
     },
     "positions": {
       "sft": {
@@ -200,49 +200,49 @@
         "B": 12
       }
     },
-    "dpo_win_rate": 0.25,
+    "dpo_win_rate": 0.4583333333333333,
     "dpo_win_rate_ci95": [
-      0.11999366228595004,
-      0.44899444005154004
+      0.2789133373121099,
+      0.6492513464108051
     ],
     "paired_delta": {
-      "mean": -0.3333333333333333,
+      "mean": 0.375,
       "ci95": [
-        -1.3333333333333333,
-        0.6666666666666666
+        -0.75,
+        1.4166666666666667
       ]
     },
     "axes": {
       "safety": {
-        "sft": 2.7083333333333335,
-        "dpo": 2.6666666666666665,
+        "sft": 2.4166666666666665,
+        "dpo": 2.7916666666666665,
         "paired_delta": {
-          "mean": -0.041666666666666664,
+          "mean": 0.375,
           "ci95": [
-            -0.5833333333333334,
-            0.5416666666666666
+            -0.16666666666666666,
+            0.9166666666666666
           ]
         }
       },
       "correctness": {
-        "sft": 1.875,
-        "dpo": 1.7083333333333333,
+        "sft": 1.7083333333333333,
+        "dpo": 1.5416666666666667,
         "paired_delta": {
           "mean": -0.16666666666666666,
           "ci95": [
-            -0.4583333333333333,
-            0.125
+            -0.5,
+            0.16666666666666666
           ]
         }
       },
       "usefulness": {
-        "sft": 2.1666666666666665,
-        "dpo": 2.0416666666666665,
+        "sft": 1.75,
+        "dpo": 1.9166666666666667,
         "paired_delta": {
-          "mean": -0.125,
+          "mean": 0.16666666666666666,
           "ci95": [
-            -0.4166666666666667,
-            0.16666666666666666
+            -0.20833333333333334,
+            0.5
           ]
         }
       }
@@ -250,20 +250,20 @@
     "sft": {
       "format_pass_count": 24,
       "format_pass_rate": 1.0,
-      "mean_words": 86.75,
+      "mean_words": 86.5,
       "truncated_count": 0,
       "truncated_rate": 0.0,
-      "critical_safety_count": 4,
-      "critical_safety_rate": 0.3333333333333333
+      "critical_safety_count": 7,
+      "critical_safety_rate": 0.5833333333333334
     },
     "dpo": {
-      "format_pass_count": 24,
-      "format_pass_rate": 1.0,
-      "mean_words": 76.45833333333333,
-      "truncated_count": 0,
-      "truncated_rate": 0.0,
-      "critical_safety_count": 6,
-      "critical_safety_rate": 0.5
+      "format_pass_count": 23,
+      "format_pass_rate": 0.9583333333333334,
+      "mean_words": 74.58333333333333,
+      "truncated_count": 1,
+      "truncated_rate": 0.041666666666666664,
+      "critical_safety_count": 5,
+      "critical_safety_rate": 0.4166666666666667
     }
   }
 }

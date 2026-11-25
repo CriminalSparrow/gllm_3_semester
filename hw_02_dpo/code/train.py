@@ -58,10 +58,11 @@ def train_trial(trial, dataset, output, backend, base_path, epochs, batch_size):
         raise RuntimeError("В оптимизатор должны поступить только веса адаптера policy")
     trainable_params = sum(param.numel() for param in model.parameters() if param.requires_grad)
     tables, lengths = format_pairs(dataset, tokenizer)
+    steps_per_epoch = math.ceil(len(tables["train"]) / (batch_size * CONFIG["gradient_accumulation"]))
     args = DPOConfig(
         output_dir=str(trial_dir), loss_type="sigmoid", beta=trial["beta"],
         learning_rate=trial["learning_rate"], lr_scheduler_type="cosine", warmup_ratio=0.1,
-        num_train_epochs=epochs, per_device_train_batch_size=batch_size,
+        num_train_epochs=epochs, max_steps=steps_per_epoch * epochs, per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size, gradient_accumulation_steps=CONFIG["gradient_accumulation"],
         model_adapter_name="default", ref_adapter_name="reference", disable_dropout=True,
         max_prompt_length=CONFIG["max_prompt_length"], max_completion_length=CONFIG["max_completion_length"],
@@ -116,6 +117,7 @@ def train(preference_dir, output, backend, base_path=None, epochs=None, batch_si
                 "train_size": len(dataset["train"]), "validation_size": len(dataset["validation"]),
                 "data_sha256": {key: digest(path) for key, path in paths.items()},
                 "sft_adapter_sha256": digest(SFT / "adapter/adapter_model.safetensors"),
+                "max_steps": math.ceil(len(dataset["train"]) / (batch_size * CONFIG["gradient_accumulation"])) * epochs,
                 "trials": CONFIG["trials"]}
     state = read_json(log_path) if log_path.exists() else {"settings": settings, "trials": {}}
     if state["settings"] != settings:
@@ -138,7 +140,9 @@ def train(preference_dir, output, backend, base_path=None, epochs=None, batch_si
         temp = (adapter / name).with_suffix(".tmp")
         temp.write_bytes(source.read_bytes())
         temp.replace(adapter / name)
-    state["selected"] = {"id": best, "rule": "max validation reward accuracy; tie: min validation DPO loss",
+    rule = ("configuration fixed from the pilot before data expansion" if len(CONFIG["trials"]) == 1
+            else "max validation reward accuracy; tie: min validation DPO loss")
+    state["selected"] = {"id": best, "rule": rule,
                          "adapter_sha256": digest(adapter / "adapter_model.safetensors")}
     write_json(log_path, state)
     print(f"DPO_COMPLETE {best}", flush=True)

@@ -73,7 +73,7 @@ if MODE in {"collect", "train"}:
     add("markdown", "preferences-title", "## Кандидаты и предпочтения")
     add("code", "preferences", """
 if MODE == "collect":
-    run("collect.py", "--output", OUT, "--batch-size", 16)
+    run("collect.py", "--output", OUT, "--batch-size", 16, "--guided-batch-size", 32)
     run("rank.py", "prepare", "--generation", OUT / "logs/preference_generation.json",
         "--package", OUT / "blind_preferences.jsonl", "--mapping", OUT / "preference_mapping.json")
     print("Слепые задания готовы. После разметки выполните rank.py assemble по README.")
@@ -113,7 +113,7 @@ else:
     add("markdown", "eval-title", "## Слепое сравнение SFT и DPO")
     add("code", "evaluation", """
 if MODE == "train":
-    run("predict.py", "--output", OUT)
+    run("predict.py", "--output", OUT, "--batch-size", 12)
     run("evaluate.py", "prepare", "--output", OUT)
     print("Слепой пакет подготовлен. После разметки выполните evaluate.py aggregate по README.")
 summary_path = OUT / "metrics/summary.json"

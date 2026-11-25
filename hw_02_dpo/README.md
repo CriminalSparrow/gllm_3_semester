@@ -2,7 +2,7 @@
 
 [Отчёт](REPORT.md) · [Ноутбук](autoservice_dpo.ipynb) · [РК1](../hw_01_sft/README.md)
 
-DPO продолжает обучение LoRA из РК1 на парах ответов той же SFT-модели. База и замороженный reference используют Qwen2.5-1.5B-Instruct той же ревизии. На тесте SFT и DPO получают одинаковые вопросы, системный промпт, greedy-декодирование и лимит генерации.
+Датасет содержит 300 preference-пар для 300 разных вопросов автосервиса, из них 270 train и 30 validation. Финальное DPO-обучение и сравнение моделей выполнены в Google Colab на Tesla T4. Для обеих сторон сравнения используются Qwen2.5-1.5B-Instruct в NF4, один системный промпт, greedy-декодирование и лимит 384 новых токена.
 
 ## Google Colab
 
@@ -12,11 +12,11 @@ DPO продолжает обучение LoRA из РК1 на парах отв
 |---|---|
 | `replay` | Загрузить материалы репозитория, показать сохранённые пары, журнал, метрики и примеры |
 | `collect` | Выбрать T4 и получить новых SFT-кандидатов и задания для слепой разметки |
-| `train` | Выбрать T4, обучить три конфигурации на сохранённых парах, получить тестовые ответы и слепой пакет |
+| `train` | Выбрать T4, обучить DPO на сохранённых парах, получить тестовые ответы и слепой пакет |
 
 Выбор ускорителя находится в **Среда выполнения → Сменить среду выполнения → T4**. Запускайте ячейки сверху вниз. Colab скачивает базовые веса с Hugging Face. Адаптер РК1 уже хранится в `hw_01_sft/adapter/`. Результаты повторного запуска сохраняются в `hw_02_dpo/review_run/`.
 
-Зафиксированный эксперимент запущен на Apple M3 Pro с FP16-базой, поскольку Colab не выделил T4. Для такого же запуска установите PyTorch с MPS и добавьте `--backend mps` к `collect.py`, `train.py` и `predict.py`. Если база уже скачана, передайте её папку через `--base-path`. В исходном прогоне батч генерации равен 16 для сбора и 12 для теста. Код для T4 загружает ту же ревизию в NF4. Результаты на двух профилях могут различаться.
+Для локального FP16-прогона установите PyTorch с MPS и добавьте `--backend mps` к `collect.py`, `train.py` и `predict.py`. Папку скачанной базы можно передать через `--base-path`. Профили T4 и MPS используют одинаковую ревизию с разной точностью весов. Фактическая среда каждой части сбора записана в `logs/preference_generation.json`.
 
 ## Скрипты
 
@@ -28,7 +28,7 @@ RK2=hw_02_dpo
 OUT=hw_02_dpo/review_run/cli
 
 # Сгенерировать новые ответы и обезличить позиции для судьи
-python "$RK2/code/collect.py" --output "$OUT" --batch-size 16
+python "$RK2/code/collect.py" --output "$OUT" --batch-size 16 --guided-batch-size 32
 python "$RK2/code/rank.py" prepare --generation "$OUT/logs/preference_generation.json" \
   --package "$OUT/blind_preferences.jsonl" --mapping "$OUT/preferences_mapping.json"
 
@@ -39,7 +39,7 @@ python "$RK2/code/rank.py" assemble --generation "$OUT/logs/preference_generatio
 
 # Для повторения зафиксированного эксперимента используйте $RK2/data вместо $OUT/data
 python "$RK2/code/train.py" --preference-dir "$OUT/data" --output "$OUT"
-python "$RK2/code/predict.py" --output "$OUT"
+python "$RK2/code/predict.py" --output "$OUT" --batch-size 12
 python "$RK2/code/evaluate.py" prepare --output "$OUT"
 
 # Посчитать метрики после оценки новых тестовых ответов
@@ -47,7 +47,9 @@ python "$RK2/code/evaluate.py" aggregate --output "$OUT" --scores "$OUT/test_rat
 python "$RK2/code/plot.py" --output "$OUT"
 ```
 
-Передайте судье только слепой пакет и рубрику `RUBRIC` из `rank.py` или `evaluate.py`. Разметка preference представляет JSONL вида `{"id":"...","scores":{"A":{"safety":3,"correctness":3,"usefulness":3,"note":"..."},"B":{...}}}` с оценками всех показанных вариантов. Разметка теста использует `{"id":"...","A":{...},"B":{...}}`. Баллы целые от 0 до 4. Для пересчёта сохранённых результатов используйте `ratings` из `logs/preference.json` и `logs/evaluation.json`. Для первого файла потребуется преобразовать отображение `id → scores` в строки `{"id": id, "scores": scores}`, для второго достаточно записать каждый элемент массива отдельной строкой. Новый текст ответа требует новой оценки. API-ключи для этого эксперимента не использовались.
+Для разметки передайте судье слепой пакет и рубрики `RUBRIC` и `EDITOR_RUBRIC` из `rank.py`. Разметка preference содержит по строке с `id`, оценками вариантов в `scores` и необязательным исправлением `repair`. В `repair` фиксируются метка исходного варианта `source`, текст `answer`, три оценки и комментарий `note`. Для теста используйте рубрику из `evaluate.py` и JSONL вида `{"id":"...","A":{...},"B":{...}}`. Баллы по трём осям целые от 0 до 4.
+
+Для пересчёта сохранённых результатов возьмите `ratings` и `repairs` из `logs/preference.json`. Каждый `id` образует строку `{"id": id, "scores": ratings[id]}`. Для записей с редактурой добавьте `"repair": repairs[id]`. Для теста запишите каждый элемент массива `ratings` из `logs/evaluation.json` отдельной строкой. Для повторной разметки используются GPT‑6.2 Sol и сохранённые рубрики.
 
 Загрузить данные из корня репозитория можно через `datasets.load_dataset`.
 
@@ -66,6 +68,7 @@ print(pairs["train"][0]["prompt"], pairs["train"][0]["chosen"])
 | Путь | Содержимое |
 |---|---|
 | `data/preference_*.jsonl` | Диалоговые `prompt`, `chosen`, `rejected` для обучения и валидации |
+| `data/prompt_pool_*.jsonl` | Вопросы и редакторские ориентиры для расширенного сбора |
 | `data/test_fresh.jsonl` | 24 новых тестовых вопроса; 20 старых берутся из `hw_01_sft/data/test.jsonl` |
 | `adapter/` | Итоговый LoRA-адаптер в `safetensors` и конфигурация PEFT |
 | `logs/preference_generation.json`, `logs/preference.json` | Кандидаты, параметры, оценки судьи, отбор и исключения |

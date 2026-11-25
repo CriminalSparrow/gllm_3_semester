@@ -13,6 +13,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from rk2 import CONFIG, SFT, SFT_CONFIG, check_answer, messages
 
+GUIDANCE = ("\nРедакторские ориентиры для этого вопроса: {reference} "
+            "Передай эти действия и уточнения своими словами. Ответь в четырёх заданных разделах, примерно 60–80 слов.")
+
 
 def environment(backend):
     gpu = torch.cuda.get_device_name(0) if backend == "t4" else platform.machine()
@@ -64,8 +67,12 @@ def generate(model, tokenizer, rows, *, temperature=0.0, max_tokens=384, seed=42
     model.eval()
     model.config.use_cache = True
     tokenizer.padding_side = "left"
-    prompts = [tokenizer.apply_chat_template(messages(row["question"]), tokenize=False,
-                                             add_generation_prompt=True) for row in rows]
+    prompts = []
+    for row in rows:
+        dialog = messages(row["question"])
+        if row.get("guided"):
+            dialog[0]["content"] += GUIDANCE.format(reference=row["reference"])
+        prompts.append(tokenizer.apply_chat_template(dialog, tokenize=False, add_generation_prompt=True))
     inputs = tokenizer(prompts, padding=True, add_special_tokens=False, return_tensors="pt").to(model.device)
     generation = {"max_new_tokens": max_tokens, "pad_token_id": tokenizer.pad_token_id,
                   "eos_token_id": tokenizer.eos_token_id, "do_sample": temperature > 0}

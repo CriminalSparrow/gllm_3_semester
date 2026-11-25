@@ -32,7 +32,7 @@ def plot_training(output):
         axis.grid(alpha=0.23)
     axes[-1].set_ylim(-0.04, 1.04)
     axes[0].legend(fontsize=8)
-    fig.suptitle("DPO на парах ответов SFT")
+    fig.suptitle("DPO на preference-парах автосервиса")
     directory = output / "plots"
     directory.mkdir(parents=True, exist_ok=True)
     fig.savefig(directory / "training.png", dpi=160)

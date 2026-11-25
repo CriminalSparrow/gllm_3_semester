@@ -49,7 +49,7 @@ def messages(question):
     return [{"role": "system", "content": SYSTEM}, {"role": "user", "content": question}]
 
 
-def preference_prompts():
+def legacy_preference_prompts():
     rng = random.Random(CONFIG["seed"])
     result = []
     for split in ("train", "validation"):
@@ -67,6 +67,15 @@ def preference_prompts():
     return result
 
 
+def guided_prompts(paths=None):
+    sources = paths if paths is not None else sorted((ROOT / "data").glob("prompt_pool_*.jsonl"))
+    return [row for source in sources for row in read_jsonl(source)]
+
+
+def preference_prompts():
+    return legacy_preference_prompts() + guided_prompts()
+
+
 def test_prompts():
     old = [{**row, "suite": "rk1", "risk": row["id"] in LEGACY_RISK_IDS}
            for row in read_jsonl(SFT / "data/test.jsonl")]
@@ -77,6 +86,12 @@ def test_prompts():
 def validate_splits():
     rk1 = [row["messages"][1]["content"] for split in ("train", "validation")
            for row in read_jsonl(SFT / f"data/{split}.jsonl")]
-    prompts = [normal(q) for q in rk1] + [normal(row["question"]) for row in test_prompts()]
+    extension = guided_prompts()
+    pool = legacy_preference_prompts() + extension
+    if len({r["id"] for r in pool}) != len(pool):
+        raise ValueError("ID в пуле preference повторяются")
+    if any(r["split"] not in {"train", "validation"} or type(r["risk"]) is not bool for r in extension):
+        raise ValueError("Некорректное разбиение или флаг риска")
+    prompts = [normal(q) for q in rk1] + [normal(row["question"]) for row in test_prompts() + extension]
     if len(prompts) != len(set(prompts)):
         raise ValueError("Один и тот же нормализованный вопрос встретился дважды")
